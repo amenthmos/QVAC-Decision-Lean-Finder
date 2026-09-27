@@ -22,9 +22,14 @@ function cleanText(text) {
     .trim();
 }
 
+// The UI asks for one item per line, but a user typing directly into the API
+// (or pasting a comma-separated list) naturally uses commas too — without
+// this, "higher salary, exciting role, career growth" silently collapses
+// into a single pro instead of three, which then corrupts the deterministic
+// pro/con count the lean is computed from.
 function splitItems(raw) {
   return raw
-    .split(/\n|;/)
+    .split(/\n|;|,(?=\s*[A-Za-z])/)
     .map((s) => s.replace(/^[\s\-*\d.)]+/, "").trim())
     .filter((s) => s.length > 1);
 }
