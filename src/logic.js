@@ -40,7 +40,13 @@ function significantWords(s) {
 function allItemsCovered(text, items) {
   const lower = text.toLowerCase();
   return items.every((item) => {
-    const words = significantWords(item);
+    let words = significantWords(item);
+    // A pro/con made only of short words (e.g. "more fun", "less pay")
+    // used to leave `words` empty, which made the check trivially pass
+    // without actually confirming the item survived into the summary.
+    if (words.length === 0) {
+      words = item.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2);
+    }
     if (words.length === 0) return true;
     return words.some((w) => lower.includes(w));
   });
