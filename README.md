@@ -21,6 +21,20 @@ Built on [Tether's QVAC SDK](https://www.npmjs.com/package/@qvac/sdk) — all in
 
 The "which way it leans" verdict is always computed deterministically in code from the number of pros vs. cons you listed — never left for the model to assert — and a grounding check confirms every pro and con you entered is mentioned in the summary before showing it.
 
+## Example
+
+Input: `{"decision":"Take a new job offer","pros":"higher salary\nmore interesting work","cons":"longer commute\nless job security at a startup"}`
+
+`src/logic.js` computes `lean` deterministically from the pro/con counts (here, 2 vs. 2 → `"evenly balanced"`) and asks the model for a summary paragraph mentioning every pro and con. Response shape:
+```json
+{"decision":"Take a new job offer",
+ "pros":["higher salary","more interesting work"],
+ "cons":["longer commute","less job security at a startup"],
+ "lean":"evenly balanced",
+ "summary":"..."}
+```
+If the summary drops a listed pro/con, it falls back to `fallbackSummary()` — a plain sentence listing every pro and con you entered.
+
 ## License
 
 MIT
